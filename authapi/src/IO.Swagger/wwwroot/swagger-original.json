@@ -1,0 +1,3526 @@
+{
+  "openapi" : "3.0.0",
+  "info" : {
+    "title" : "Permission Management API documentation",
+    "description" : "This is an API for managing application permissions.",
+    "version" : "1.0.0-oas3"
+  },
+  "servers" : [ {
+    "url" : "https://virtserver.swaggerhub.com/polarfox/AuthAPI/1.0.0"
+  } ],
+  "security" : [ {
+    "implicit" : [ "read", "write" ]
+  } ],
+  "tags" : [ {
+    "name" : "managementAPI",
+    "description" : "API for setting up roles and permissions for applications"
+  }, {
+    "name" : "authorizationAPI",
+    "description" : "API for checking & managing user permissions"
+  }, {
+    "name" : "userManagementAPI",
+    "description" : "API for managing user accounts"
+  } ],
+  "paths" : {
+    "/applications" : {
+      "get" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Gets list of Applications",
+        "description" : "Get applications available to current user.",
+        "operationId" : "getApplications",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Register new Application",
+        "description" : "Register new application in application list",
+        "operationId" : "insertApplication",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Application"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Application"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/application/{appId}" : {
+      "post" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Post update to Application",
+        "description" : "Post update to Application",
+        "operationId" : "updateApplication",
+        "parameters" : [ {
+          "name" : "appId",
+          "in" : "path",
+          "description" : "Application Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Application"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Unregister Application",
+        "description" : "Delete/unregister application",
+        "operationId" : "deleteApplication",
+        "parameters" : [ {
+          "name" : "appId",
+          "in" : "path",
+          "description" : "Application Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles" : {
+      "get" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Gets available Roles in Application",
+        "description" : "Get roles for current user in specified application.",
+        "operationId" : "getRoles",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Add new Role to Application",
+        "description" : "Add new Role to Application",
+        "operationId" : "insertRole",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Role"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Role"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles/{roleId}" : {
+      "post" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Post update to Role",
+        "description" : "Post update to Role",
+        "operationId" : "updateRole",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "path",
+          "description" : "Role Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Role"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Delete Role from Application",
+        "description" : "Delete Role from Application",
+        "operationId" : "deleteRole",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "path",
+          "description" : "Role Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permissions/{roleId}" : {
+      "get" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Gets Role Permissions",
+        "description" : "Gets Role Permissions",
+        "operationId" : "getRolePermissions",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "path",
+          "description" : "Role Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_2"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Add Permission to Role",
+        "description" : "Add Permission to Role",
+        "operationId" : "insertRolePermissions",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "path",
+          "description" : "Role Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Permission"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "managementAPI" ],
+        "summary" : "Delete Permission from Role",
+        "description" : "Delete Permission from Role",
+        "operationId" : "deletePermissiom",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "path",
+          "description" : "Role Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        }, {
+          "name" : "entity",
+          "in" : "query",
+          "description" : "The entity name",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "action",
+          "in" : "query",
+          "description" : "The action name",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/checkpermission" : {
+      "get" : {
+        "tags" : [ "authorizationAPI" ],
+        "summary" : "Check whether Permission is granted for user",
+        "description" : "Check whether Permission is granted for user",
+        "operationId" : "checkPermission",
+        "parameters" : [ {
+          "name" : "entity",
+          "in" : "query",
+          "description" : "The entity name",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "DataProduct"
+        }, {
+          "name" : "action",
+          "in" : "query",
+          "description" : "The action name",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "example" : "Create"
+        }, {
+          "name" : "entityId",
+          "in" : "query",
+          "description" : "The particular entity Id",
+          "required" : false,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Permission is granted to user"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Permission not granted to user"
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/checkrole" : {
+      "get" : {
+        "tags" : [ "authorizationAPI" ],
+        "summary" : "Check whether Role is granted for user",
+        "description" : "Check whether Role is granted for user",
+        "operationId" : "checkRole",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "query",
+          "description" : "The Role Id",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "userId",
+          "in" : "query",
+          "description" : "The User ID",
+          "required" : true,
+          "style" : "form",
+          "explode" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Role is granted to user"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Role not granted to user"
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/checkrole/{roleId}" : {
+      "get" : {
+        "tags" : [ "authorizationAPI" ],
+        "summary" : "Check whether Role is granted for current user",
+        "description" : "Check whether Role is granted for current user",
+        "operationId" : "checkRoleById",
+        "parameters" : [ {
+          "name" : "roleId",
+          "in" : "path",
+          "description" : "The Role Id",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Role is granted to user"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Role not granted to user"
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations" : {
+      "get" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Gets list of Organizations",
+        "description" : "Get organizations available to current user. Typically sysadmin user can access all organizations, customer user can access only his own organization",
+        "operationId" : "getOrganizations",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_3"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Register new Organization",
+        "description" : "Register new organization in organization list",
+        "operationId" : "insertOrganization",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Organization"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Organization"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/organizations/{orgId}" : {
+      "post" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Post update to Organization",
+        "description" : "Post update to Organization",
+        "operationId" : "updateOrganization",
+        "parameters" : [ {
+          "name" : "orgId",
+          "in" : "path",
+          "description" : "Organization Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Organization"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Delete Organization",
+        "description" : "Delete Organization",
+        "operationId" : "deleteOrganization",
+        "parameters" : [ {
+          "name" : "orgId",
+          "in" : "path",
+          "description" : "Organization Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users" : {
+      "get" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Get Users List",
+        "description" : "Get users available to current user. Typically sysadmin user can access all users, local admin user can access only users of his organization, casual user can access only himself",
+        "operationId" : "getUsers",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_4"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}" : {
+      "post" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Post update to User profile",
+        "description" : "Post update to User profile",
+        "operationId" : "updateUser",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "Organization Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/User"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Delete User profile",
+        "description" : "Delete User profile",
+        "operationId" : "deleteUser",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "Organization Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/lock" : {
+      "post" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Lock user account",
+        "description" : "Lock user account",
+        "operationId" : "lockUser",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "Organization Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/unlock" : {
+      "post" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Unlock user account",
+        "description" : "Unlock user account",
+        "operationId" : "unlockUser",
+        "parameters" : [ {
+          "name" : "userId",
+          "in" : "path",
+          "description" : "Organization Id.",
+          "required" : true,
+          "style" : "simple",
+          "explode" : false,
+          "schema" : {
+            "minLength" : 10,
+            "type" : "string"
+          },
+          "example" : 1234567890
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/me" : {
+      "get" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Get current user profile",
+        "description" : "Get current user profile",
+        "operationId" : "getCurrentUser",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/inline_response_200_5"
+                }
+              }
+            }
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/grant" : {
+      "post" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Grant Role to User",
+        "description" : "Grant Role to User",
+        "operationId" : "grantRole",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserRole"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/revoke" : {
+      "post" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Revoke Role from User",
+        "description" : "Revoke Role from User",
+        "operationId" : "revokeRole",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserRole"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/grantpermission" : {
+      "post" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Grant permission for particular entity to User",
+        "description" : "Grant permission to User",
+        "operationId" : "grantPermission",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserPermission"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/revokepermission" : {
+      "post" : {
+        "tags" : [ "userManagementAPI" ],
+        "summary" : "Revoke permission for particular entity from User",
+        "description" : "Revoke permission from User",
+        "operationId" : "revokePermission",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UserPermission"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          },
+          "400" : {
+            "description" : "Invalid syntax",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "401" : {
+            "description" : "Authorization key is missing or invalid",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Authorization key is missing"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "Requested resource not found",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Requested resource not found"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "405" : {
+            "description" : "Requested method not allowed",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal server error",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Error"
+                },
+                "example" : {
+                  "errors" : [ {
+                    "message" : "Internal server error"
+                  } ],
+                  "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "Role" : {
+        "type" : "object",
+        "properties" : {
+          "roleId" : {
+            "type" : "string",
+            "description" : "UUID of role"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Role name"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Role description"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "Role Type, the customer roles can be created/edited by customer admins, the system ones managed by system admins",
+            "enum" : [ "customerRole", "systemRole" ]
+          },
+          "entityLevelAccess" : {
+            "type" : "boolean",
+            "description" : "Allows to use entity-level permission set for users within current role"
+          },
+          "permissions" : {
+            "type" : "array",
+            "description" : "Role permissions",
+            "items" : {
+              "$ref" : "#/components/schemas/Permission"
+            }
+          }
+        },
+        "example" : {
+          "roleId" : "roleId",
+          "permissions" : [ {
+            "entityType" : "Contract",
+            "description" : "description",
+            "entityId" : "entityId",
+            "id" : "id",
+            "applicationId" : "applicationId",
+            "operation" : "Edit"
+          }, {
+            "entityType" : "Contract",
+            "description" : "description",
+            "entityId" : "entityId",
+            "id" : "id",
+            "applicationId" : "applicationId",
+            "operation" : "Edit"
+          } ],
+          "name" : "name",
+          "description" : "description",
+          "type" : "customerRole",
+          "entityLevelAccess" : true
+        }
+      },
+      "Permission" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "UUID of permission"
+          },
+          "applicationId" : {
+            "type" : "string",
+            "description" : "optional UUID of application the permission belongs to"
+          },
+          "entityType" : {
+            "type" : "string",
+            "description" : "Permission entity type",
+            "example" : "Contract"
+          },
+          "operation" : {
+            "type" : "string",
+            "description" : "Permission operation name",
+            "example" : "Edit"
+          },
+          "entityId" : {
+            "type" : "string",
+            "description" : "UUID of particular entity the permission belongs to, optional, for entity-level permission set"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Permission description"
+          }
+        },
+        "example" : {
+          "entityType" : "Contract",
+          "description" : "description",
+          "entityId" : "entityId",
+          "id" : "id",
+          "applicationId" : "applicationId",
+          "operation" : "Edit"
+        }
+      },
+      "Application" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "UUID of application"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Application Name"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Application description"
+          },
+          "permissions" : {
+            "type" : "array",
+            "description" : "Application-defined permissions",
+            "items" : {
+              "$ref" : "#/components/schemas/Permission"
+            }
+          }
+        },
+        "example" : {
+          "permissions" : [ {
+            "entityType" : "Contract",
+            "description" : "description",
+            "entityId" : "entityId",
+            "id" : "id",
+            "applicationId" : "applicationId",
+            "operation" : "Edit"
+          }, {
+            "entityType" : "Contract",
+            "description" : "description",
+            "entityId" : "entityId",
+            "id" : "id",
+            "applicationId" : "applicationId",
+            "operation" : "Edit"
+          } ],
+          "name" : "name",
+          "description" : "description",
+          "id" : "id"
+        }
+      },
+      "Organization" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "string",
+            "description" : "UUID of organization"
+          },
+          "name" : {
+            "type" : "string",
+            "description" : "Organization Name"
+          },
+          "description" : {
+            "type" : "string",
+            "description" : "Organization description"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "Organization Type, define is this organization customer or our own internal one",
+            "enum" : [ "customer", "internal" ]
+          }
+        },
+        "example" : {
+          "name" : "name",
+          "description" : "description",
+          "id" : "id",
+          "type" : "customer"
+        }
+      },
+      "User" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "string",
+            "description" : "UUID of user"
+          },
+          "organizationId" : {
+            "type" : "string",
+            "description" : "UUID of organization the user belongs to"
+          },
+          "firstName" : {
+            "type" : "string",
+            "description" : "First name of user"
+          },
+          "lastName" : {
+            "type" : "string",
+            "description" : "Last name"
+          },
+          "middleName" : {
+            "type" : "string",
+            "description" : "Middle name"
+          },
+          "mail" : {
+            "type" : "string",
+            "description" : "User email Address"
+          },
+          "phone" : {
+            "type" : "string",
+            "description" : "User phone number"
+          },
+          "position" : {
+            "type" : "string",
+            "description" : "User position"
+          },
+          "avatar" : {
+            "type" : "string",
+            "description" : "URL of user avatar"
+          },
+          "type" : {
+            "type" : "string",
+            "description" : "User Type",
+            "enum" : [ "customerUser", "customerAdmin", "internalUser", "internalAdmin" ]
+          },
+          "status" : {
+            "type" : "string",
+            "description" : "User account status",
+            "enum" : [ "active", "locked", "inactive" ]
+          },
+          "statusReason" : {
+            "type" : "string",
+            "description" : "Reason to assign current user status",
+            "example" : "Locked due to exceeding the number of incorrect password attempts"
+          }
+        },
+        "example" : {
+          "organizationId" : "organizationId",
+          "firstName" : "firstName",
+          "lastName" : "lastName",
+          "statusReason" : "Locked due to exceeding the number of incorrect password attempts",
+          "mail" : "mail",
+          "phone" : "phone",
+          "middleName" : "middleName",
+          "position" : "position",
+          "avatar" : "avatar",
+          "type" : "customerUser",
+          "userId" : "userId",
+          "status" : "active"
+        }
+      },
+      "UserRole" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "string",
+            "description" : "UUID of user"
+          },
+          "roleId" : {
+            "type" : "string",
+            "description" : "UUID of role"
+          }
+        }
+      },
+      "UserPermission" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "string",
+            "description" : "UUID of user"
+          },
+          "permissionId" : {
+            "type" : "string",
+            "description" : "UUID of permission"
+          },
+          "entityId" : {
+            "type" : "string",
+            "description" : "optional UUID of particular entity the permission belongs to"
+          }
+        }
+      },
+      "Error" : {
+        "required" : [ "errors" ],
+        "type" : "object",
+        "properties" : {
+          "errors" : {
+            "type" : "array",
+            "description" : "Array of detailed error messages",
+            "items" : {
+              "$ref" : "#/components/schemas/Error_errors"
+            }
+          },
+          "reqId" : {
+            "type" : "string",
+            "description" : "Server generated UUID for the request to help with API issue solving"
+          }
+        }
+      },
+      "inline_response_200" : {
+        "required" : [ "data" ],
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Application"
+            }
+          }
+        },
+        "example" : {
+          "data" : [ {
+            "permissions" : [ {
+              "entityType" : "Contract",
+              "description" : "description",
+              "entityId" : "entityId",
+              "id" : "id",
+              "applicationId" : "applicationId",
+              "operation" : "Edit"
+            }, {
+              "entityType" : "Contract",
+              "description" : "description",
+              "entityId" : "entityId",
+              "id" : "id",
+              "applicationId" : "applicationId",
+              "operation" : "Edit"
+            } ],
+            "name" : "name",
+            "description" : "description",
+            "id" : "id"
+          }, {
+            "permissions" : [ {
+              "entityType" : "Contract",
+              "description" : "description",
+              "entityId" : "entityId",
+              "id" : "id",
+              "applicationId" : "applicationId",
+              "operation" : "Edit"
+            }, {
+              "entityType" : "Contract",
+              "description" : "description",
+              "entityId" : "entityId",
+              "id" : "id",
+              "applicationId" : "applicationId",
+              "operation" : "Edit"
+            } ],
+            "name" : "name",
+            "description" : "description",
+            "id" : "id"
+          } ]
+        }
+      },
+      "inline_response_200_1" : {
+        "required" : [ "data" ],
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Role"
+            }
+          }
+        },
+        "example" : {
+          "data" : [ {
+            "roleId" : "roleId",
+            "permissions" : [ {
+              "entityType" : "Contract",
+              "description" : "description",
+              "entityId" : "entityId",
+              "id" : "id",
+              "applicationId" : "applicationId",
+              "operation" : "Edit"
+            }, {
+              "entityType" : "Contract",
+              "description" : "description",
+              "entityId" : "entityId",
+              "id" : "id",
+              "applicationId" : "applicationId",
+              "operation" : "Edit"
+            } ],
+            "name" : "name",
+            "description" : "description",
+            "type" : "customerRole",
+            "entityLevelAccess" : true
+          }, {
+            "roleId" : "roleId",
+            "permissions" : [ {
+              "entityType" : "Contract",
+              "description" : "description",
+              "entityId" : "entityId",
+              "id" : "id",
+              "applicationId" : "applicationId",
+              "operation" : "Edit"
+            }, {
+              "entityType" : "Contract",
+              "description" : "description",
+              "entityId" : "entityId",
+              "id" : "id",
+              "applicationId" : "applicationId",
+              "operation" : "Edit"
+            } ],
+            "name" : "name",
+            "description" : "description",
+            "type" : "customerRole",
+            "entityLevelAccess" : true
+          } ]
+        }
+      },
+      "inline_response_200_2" : {
+        "required" : [ "data" ],
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Permission"
+            }
+          }
+        },
+        "example" : {
+          "data" : [ {
+            "entityType" : "Contract",
+            "description" : "description",
+            "entityId" : "entityId",
+            "id" : "id",
+            "applicationId" : "applicationId",
+            "operation" : "Edit"
+          }, {
+            "entityType" : "Contract",
+            "description" : "description",
+            "entityId" : "entityId",
+            "id" : "id",
+            "applicationId" : "applicationId",
+            "operation" : "Edit"
+          } ]
+        }
+      },
+      "inline_response_200_3" : {
+        "required" : [ "data" ],
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/Organization"
+            }
+          }
+        },
+        "example" : {
+          "data" : [ {
+            "name" : "name",
+            "description" : "description",
+            "id" : "id",
+            "type" : "customer"
+          }, {
+            "name" : "name",
+            "description" : "description",
+            "id" : "id",
+            "type" : "customer"
+          } ]
+        }
+      },
+      "inline_response_200_4" : {
+        "required" : [ "data" ],
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/components/schemas/User"
+            }
+          }
+        },
+        "example" : {
+          "data" : [ {
+            "organizationId" : "organizationId",
+            "firstName" : "firstName",
+            "lastName" : "lastName",
+            "statusReason" : "Locked due to exceeding the number of incorrect password attempts",
+            "mail" : "mail",
+            "phone" : "phone",
+            "middleName" : "middleName",
+            "position" : "position",
+            "avatar" : "avatar",
+            "type" : "customerUser",
+            "userId" : "userId",
+            "status" : "active"
+          }, {
+            "organizationId" : "organizationId",
+            "firstName" : "firstName",
+            "lastName" : "lastName",
+            "statusReason" : "Locked due to exceeding the number of incorrect password attempts",
+            "mail" : "mail",
+            "phone" : "phone",
+            "middleName" : "middleName",
+            "position" : "position",
+            "avatar" : "avatar",
+            "type" : "customerUser",
+            "userId" : "userId",
+            "status" : "active"
+          } ]
+        }
+      },
+      "inline_response_200_5" : {
+        "required" : [ "data" ],
+        "type" : "object",
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/User"
+          }
+        },
+        "example" : {
+          "data" : {
+            "organizationId" : "organizationId",
+            "firstName" : "firstName",
+            "lastName" : "lastName",
+            "statusReason" : "Locked due to exceeding the number of incorrect password attempts",
+            "mail" : "mail",
+            "phone" : "phone",
+            "middleName" : "middleName",
+            "position" : "position",
+            "avatar" : "avatar",
+            "type" : "customerUser",
+            "userId" : "userId",
+            "status" : "active"
+          }
+        }
+      },
+      "Error_errors" : {
+        "type" : "object",
+        "properties" : {
+          "message" : {
+            "type" : "string"
+          }
+        },
+        "example" : null
+      }
+    },
+    "responses" : {
+      "BadRequest" : {
+        "description" : "Invalid syntax",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            },
+            "example" : {
+              "errors" : [ {
+                "message" : "Invalid query parameter 'role'. Valid values are 'roleId'"
+              } ],
+              "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+            }
+          }
+        }
+      },
+      "Unauthorized" : {
+        "description" : "Authorization key is missing or invalid",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            },
+            "example" : {
+              "errors" : [ {
+                "message" : "Authorization key is missing"
+              } ],
+              "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+            }
+          }
+        }
+      },
+      "NotFound" : {
+        "description" : "Requested resource not found",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            },
+            "example" : {
+              "errors" : [ {
+                "message" : "Requested resource not found"
+              } ],
+              "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+            }
+          }
+        }
+      },
+      "MethodNotAllowed" : {
+        "description" : "Requested method not allowed",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            },
+            "example" : {
+              "errors" : [ {
+                "message" : "Method 'Put' not allowed. Allowed methods are 'Get' and 'Post'."
+              } ],
+              "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+            }
+          }
+        }
+      },
+      "InternalServerError" : {
+        "description" : "Internal server error",
+        "content" : {
+          "application/json" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/Error"
+            },
+            "example" : {
+              "errors" : [ {
+                "message" : "Internal server error"
+              } ],
+              "reqId" : "123e4567-e89b-12d3-a456-426614174000"
+            }
+          }
+        }
+      }
+    },
+    "parameters" : {
+      "userId" : {
+        "name" : "userId",
+        "in" : "path",
+        "description" : "Organization Id.",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "minLength" : 10,
+          "type" : "string"
+        },
+        "example" : 1234567890
+      },
+      "orgId" : {
+        "name" : "orgId",
+        "in" : "path",
+        "description" : "Organization Id.",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "minLength" : 10,
+          "type" : "string"
+        },
+        "example" : 1234567890
+      },
+      "appId" : {
+        "name" : "appId",
+        "in" : "path",
+        "description" : "Application Id.",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "minLength" : 10,
+          "type" : "string"
+        },
+        "example" : 1234567890
+      },
+      "roleId" : {
+        "name" : "roleId",
+        "in" : "path",
+        "description" : "Role Id.",
+        "required" : true,
+        "style" : "simple",
+        "explode" : false,
+        "schema" : {
+          "minLength" : 10,
+          "type" : "string"
+        },
+        "example" : 1234567890
+      }
+    },
+    "securitySchemes" : {
+      "implicit" : {
+        "type" : "oauth2",
+        "flows" : {
+          "implicit" : {
+            "authorizationUrl" : "http://example.com/oauth/auth",
+            "scopes" : {
+              "write" : "allows modifying resources",
+              "read" : "allows reading resources"
+            }
+          }
+        }
+      }
+    }
+  }
+}
